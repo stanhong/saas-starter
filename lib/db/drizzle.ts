@@ -5,9 +5,12 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-if (!process.env.POSTGRES_URL) {
-  throw new Error('POSTGRES_URL environment variable is not set');
+// POSTGRES_URL이 없으면 POSTGRES_URL_NON_POOLING 사용 (Supabase 호환)
+const postgresUrl = process.env.POSTGRES_URL || process.env.POSTGRES_URL_NON_POOLING;
+
+if (!postgresUrl) {
+  throw new Error('POSTGRES_URL or POSTGRES_URL_NON_POOLING environment variable is not set');
 }
 
-export const client = postgres(process.env.POSTGRES_URL);
+export const client = postgres(postgresUrl);
 export const db = drizzle(client, { schema });
