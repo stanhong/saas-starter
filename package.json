@@ -6,11 +6,16 @@
     "start": "next start",
     "db:setup": "npx tsx lib/db/setup.ts",
     "db:seed": "npx tsx lib/db/seed.ts",
+    "db:seed-guilds": "npx tsx lib/db/seed-guilds.ts",
+    "db:seed-contacts": "npx tsx lib/db/seed-contacts.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:refresh": "pnpm db:generate && pnpm db:migrate && pnpm db:seed-guilds && pnpm db:seed-contacts"
   },
   "dependencies": {
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@tailwindcss/postcss": "4.1.7",
     "@types/node": "^22.15.18",
     "@types/react": "19.1.4",
@@ -31,7 +36,6 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "server-only": "^0.0.1",
-    "stripe": "^18.1.0",
     "swr": "^2.3.3",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "4.1.7",

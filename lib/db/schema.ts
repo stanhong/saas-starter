@@ -5,6 +5,7 @@ import {
   text,
   timestamp,
   integer,
+  boolean,
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -24,9 +25,6 @@ export const teams = pgTable('teams', {
   name: varchar('name', { length: 100 }).notNull(),
   createdAt: timestamp('created_at').notNull().defaultNow(),
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
-  stripeCustomerId: text('stripe_customer_id').unique(),
-  stripeSubscriptionId: text('stripe_subscription_id').unique(),
-  stripeProductId: text('stripe_product_id'),
   planName: varchar('plan_name', { length: 50 }),
   subscriptionStatus: varchar('subscription_status', { length: 20 }),
 });
@@ -66,6 +64,29 @@ export const invitations = pgTable('invitations', {
     .references(() => users.id),
   invitedAt: timestamp('invited_at').notNull().defaultNow(),
   status: varchar('status', { length: 20 }).notNull().default('pending'),
+});
+
+export const guilds = pgTable('guilds', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 100 }).notNull(),
+  leader: varchar('leader', { length: 100 }).notNull(),
+  description: text('description'),
+  rank: integer('rank').notNull().unique(),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
+});
+
+export const contacts = pgTable('contacts', {
+  id: serial('id').primaryKey(),
+  rank: integer('rank').notNull(),
+  nickname: varchar('nickname', { length: 100 }).notNull(),
+  guild: varchar('guild', { length: 100 }).notNull(),
+  status: varchar('status', { length: 20 }).notNull().default('not_started'), // 'not_started', 'in_progress', 'completed'
+  needsFollowUp: boolean('needs_follow_up').notNull().default(false),
+  manager: varchar('manager', { length: 50 }), // '캄튼' or '도둔'
+  memo: text('memo'),
+  createdAt: timestamp('created_at').notNull().defaultNow(),
+  updatedAt: timestamp('updated_at').notNull().defaultNow(),
 });
 
 export const teamsRelations = relations(teams, ({ many }) => ({
@@ -122,6 +143,10 @@ export type ActivityLog = typeof activityLogs.$inferSelect;
 export type NewActivityLog = typeof activityLogs.$inferInsert;
 export type Invitation = typeof invitations.$inferSelect;
 export type NewInvitation = typeof invitations.$inferInsert;
+export type Guild = typeof guilds.$inferSelect;
+export type NewGuild = typeof guilds.$inferInsert;
+export type Contact = typeof contacts.$inferSelect;
+export type NewContact = typeof contacts.$inferInsert;
 export type TeamDataWithMembers = Team & {
   teamMembers: (TeamMember & {
     user: Pick<User, 'id' | 'name' | 'email'>;

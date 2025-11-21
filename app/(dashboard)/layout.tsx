@@ -65,6 +65,12 @@ function UserMenu() {
             <span>Dashboard</span>
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem className="cursor-pointer">
+          <Link href="/guilds" className="flex w-full items-center">
+            <CircleIcon className="mr-2 h-4 w-4" />
+            <span>길드 랭킹</span>
+          </Link>
+        </DropdownMenuItem>
         <form action={handleSignOut} className="w-full">
           <button type="submit" className="flex w-full">
             <DropdownMenuItem className="w-full flex-1 cursor-pointer">
@@ -99,7 +105,6 @@ function Header() {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <section className="flex flex-col min-h-screen">
-      <Header />
       {children}
     </section>
   );
